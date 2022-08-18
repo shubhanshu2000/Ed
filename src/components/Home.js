@@ -18,7 +18,7 @@ function Home() {
   }, []);
   return (
     <>
-      <div className="flex flex-wrap w- text-center">
+      <div className="flex flex-wrap w-4/5 text-center">
         {data.map(({ product_id, name, stock, sellin_price }) => {
           return (
             <Product
