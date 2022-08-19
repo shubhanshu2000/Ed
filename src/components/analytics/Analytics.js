@@ -1,23 +1,27 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useReducer, useState } from "react";
+
 import { Chart } from "react-google-charts";
 
-const Analytics = ({ data }) => {
+const Analytics = ({ state, dispatch }) => {
   const [chartjsData, setChartjsData] = useState([]);
-  const { productRes, userRes, orderRes } = data;
-  const chartdata = () => {
+
+  const { orderRes, productRes, userRes } = state.analyticData;
+  const chartdata = async () => {
     let cD = [["name", "id"]];
-    productRes?.map(({ product_id, name }) => {
+    await productRes.map(({ product_id, name }) => {
       let userData = [product_id, name];
       cD.push(userData);
       setChartjsData(cD);
       return cD;
     });
   };
-  console.log(chartjsData);
+
+  if (!productRes) {
+    <h1 className="text-center font-bold text-2xl">Loading...</h1>;
+  }
   useEffect(() => {
     chartdata();
-  }, []);
+  }, [productRes]);
   const options = {
     title: "Analytics",
   };
