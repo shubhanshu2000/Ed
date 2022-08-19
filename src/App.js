@@ -1,7 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Analytics from "./components/analytics/Analytics";
+import FetchAnalytics from "./components/analytics/FetchAnalytics";
 import Navigation from "./components/Navigation";
-import Orders from "./components/orders/Orders";
+
 import Products from "./components/Products/Products";
 
 function App() {
@@ -11,8 +13,8 @@ function App() {
         <Navigation />
         <Routes>
           <Route path="/" element={<Products />} />
-          <Route path="/orders" element={<Orders />} />
-          {/* <Route path="/orders" element={<Analytics />} /> */}
+
+          <Route path="/analytics" element={<FetchAnalytics />} />
         </Routes>{" "}
       </BrowserRouter>
     </div>

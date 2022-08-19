@@ -20,10 +20,15 @@ function Home() {
   return (
     <>
       <div className="flex">
-        <div className="flex flex-wrap w-4/5 text-center">
+        <div
+          style={{ width: state.cart.length > 0 ? "80%" : "100%" }}
+          className="flex flex-wrap  text-center"
+        >
           <Product state={state} dispatch={dispatch} />
         </div>
-        <Cart state={state} dispatch={dispatch} />
+        {state.cart.length > 0 ? (
+          <Cart state={state} dispatch={dispatch} />
+        ) : null}
       </div>
     </>
   );

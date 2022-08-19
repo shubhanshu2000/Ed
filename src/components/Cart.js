@@ -25,23 +25,23 @@ const Cart = ({ state, dispatch }) => {
       <b className="text-center">Subtotal: $ {total}</b>
       <div className="flex flex-col w-full">
         {cart.length > 0 ? (
-          cart.map((prod) => (
+          cart.map((product) => (
             <div
-              key={prod.title}
+              key={product.title}
               className="flex p-2 border-2 border-gray-400 m-1 justify-between"
             >
               <div className="flex gap-2">
                 <div className="flex flex-col justify-evenly">
-                  <span>{prod.title}</span>
-                  <b>$ {prod.price}</b>
+                  <span>{product.title}</span>
+                  <b>$ {product.price}</b>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={() => changeQty(prod.id, prod.qty - 1)}>
+                <button onClick={() => changeQty(product.id, product.qty - 1)}>
                   -
                 </button>
-                <span>{prod.qty}</span>
-                <button onClick={() => changeQty(prod.id, prod.qty + 1)}>
+                <span>{product.qty}</span>
+                <button onClick={() => changeQty(product.id, product.qty + 1)}>
                   +
                 </button>
               </div>

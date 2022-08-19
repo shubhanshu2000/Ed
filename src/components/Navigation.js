@@ -7,7 +7,7 @@ const Navigation = () => {
       <header>
         <nav className="flex justify-around bg-blue-200 py-4 ">
           <Link to="/">Products</Link>
-          <Link to="/orders">Orders</Link>
+
           <Link to="/analytics">Analytics</Link>
         </nav>
       </header>
