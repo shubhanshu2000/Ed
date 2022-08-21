@@ -3,6 +3,7 @@ export const initialState = {
   clicked: false,
   priceSorted: [],
   stockSorted: [],
+  mostPurchasedProduct: [],
 };
 
 export const analyticsReducer = (state, action) => {

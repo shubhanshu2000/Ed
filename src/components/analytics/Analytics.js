@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect } from "react";
 import { Chart } from "react-google-charts";
 import { ACTIONS } from "../Actions";
 import Text from "./Text";
 
 const Analytics = ({ state, dispatch }) => {
-  const [data, setData] = useState([]);
-
   const { orderRes, productRes, userRes } = state.analyticData;
 
   const ProductSort = (arr = []) => {
@@ -15,8 +12,9 @@ const Analytics = ({ state, dispatch }) => {
     };
     arr.sort(priceSorter);
     let priceSortedArr = [["selling price", "name"]];
-    arr.map(({ selling_price, name }) => {
+    arr.map(({ selling_price, name, product_id }) => {
       priceSortedArr.push(["$" + selling_price, name]);
+
       return priceSortedArr;
     });
     dispatch({
@@ -40,10 +38,39 @@ const Analytics = ({ state, dispatch }) => {
     });
   };
 
-  const MostPurchasedProduct = (arr = []) => {};
+  const PurchasedProduct = (arr = []) => {
+    let MostPurchasedProductArr = [["Name", "Quantity"]];
+
+    let q = [];
+
+    arr.filter(({ product_id, quantity, user_id, order_date }) => {
+      productRes.find((product) => {
+        product.product_id === product_id &&
+          q.push({ name: product.name, quantity: quantity });
+        return product.product_id === product_id;
+      });
+      return product_id;
+    });
+    q = q.reduce((obj, item) => {
+      let find = obj.find((i) => i.name === item.name);
+      let d = { ...item };
+      find ? (find.quantity += item.quantity) : obj.push(d);
+      return obj;
+    }, []);
+    q.sort((a, b) => a.quantity - b.quantity);
+    q.map(({ name, quantity }) => {
+      MostPurchasedProductArr.push([name, quantity]);
+      return MostPurchasedProductArr;
+    });
+    dispatch({
+      type: ACTIONS.MOST_PURCHASED_PRODUCT,
+      payload: MostPurchasedProductArr,
+    });
+  };
 
   useEffect(() => {
     ProductSort(productRes);
+    PurchasedProduct(orderRes);
   }, [state.analyticData]);
 
   return (
@@ -66,13 +93,27 @@ const Analytics = ({ state, dispatch }) => {
           )}
         </div>
         <div>
-          <Text txt={"Products sorted according to price"} />
           {productRes ? (
             <Chart
-              chartType="Bar"
+              chartType="ComboChart"
               data={state.stockSorted}
               options={{
                 title: "Stock of products ",
+              }}
+              width="100%"
+              height="100vh"
+            />
+          ) : (
+            <h1>Loading...</h1>
+          )}
+        </div>
+        <div>
+          {productRes ? (
+            <Chart
+              chartType="ColumnChart"
+              data={state.mostPurchasedProduct}
+              options={{
+                title: "Most purchased product",
               }}
               width="100%"
               height="100vh"
