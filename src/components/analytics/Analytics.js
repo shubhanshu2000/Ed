@@ -40,17 +40,21 @@ const Analytics = ({ state, dispatch }) => {
 
   const PurchasedProduct = (arr = []) => {
     let MostPurchasedProductArr = [["Name", "Quantity"]];
+    let ppl = [];
 
     let q = [];
+    let n = [];
 
     arr.filter(({ product_id, quantity, user_id, order_date }) => {
       productRes.find((product) => {
         product.product_id === product_id &&
-          q.push({ name: product.name, quantity: quantity });
+          q.push({ name: product.name, quantity }) &&
+          n.push({ name: product.name, quantity, user_id, order_date });
         return product.product_id === product_id;
       });
       return product_id;
     });
+    //Most purchased product acc to quantity
     q = q.reduce((obj, item) => {
       let find = obj.find((i) => i.name === item.name);
       let d = { ...item };
@@ -66,7 +70,40 @@ const Analytics = ({ state, dispatch }) => {
       type: ACTIONS.MOST_PURCHASED_PRODUCT,
       payload: MostPurchasedProductArr,
     });
+
+    //Most purchased product acc to user and quantity
+
+    n.filter(({ name, user_id, order_date, quantity }) => {
+      userRes.find((user) => {
+        user.user_id === user_id &&
+          ppl.push({
+            name,
+            quantity,
+            userName: user.name,
+            order_date,
+            user_id,
+          });
+        return user.user_id === user_id;
+      });
+      return user_id;
+    });
+    // ppl.reduce((obj, item) => {
+    //   if (state.setPPLID === obj.user_id) {
+    //     let find = obj.find((i) => i.name === item.name);
+    //     let d = { ...item };
+    //     find ? (find.quantity += item.quantity) : obj.push(d);
+    //   }
+    //   return obj;
+    // }, []);
+    // ppl.sort((a, b) => a.user_id - b.user_id);
+    // console.log(ppl);
+    // dispatch({ type: ACTIONS.PPL, payload: ppl });
   };
+
+  // const handleSelectChange = (e) => {
+  //   const { value } = e.target;
+  //   dispatch({ type: ACTIONS.PPL_ID, payload: value });
+  // };
 
   useEffect(() => {
     ProductSort(productRes);
@@ -76,52 +113,62 @@ const Analytics = ({ state, dispatch }) => {
   return (
     <>
       <div className="flex mb-4 flex-col  w-full">
-        <div>
-          <Text txt={"Product sorted acording to price"} />
-          {productRes ? (
-            <Chart
-              chartType="Bar"
-              data={state.priceSorted}
-              options={{
-                title: "Product sorted according to price",
-              }}
-              width="100%"
-              height="100vh"
-            />
-          ) : (
-            <h1>Loading...</h1>
-          )}
-        </div>
-        <div>
-          {productRes ? (
-            <Chart
-              chartType="ComboChart"
-              data={state.stockSorted}
-              options={{
-                title: "Stock of products ",
-              }}
-              width="100%"
-              height="100vh"
-            />
-          ) : (
-            <h1>Loading...</h1>
-          )}
-        </div>
-        <div>
-          {productRes ? (
-            <Chart
-              chartType="ColumnChart"
-              data={state.mostPurchasedProduct}
-              options={{
-                title: "Most purchased product",
-              }}
-              width="100%"
-              height="100vh"
-            />
-          ) : (
-            <h1>Loading...</h1>
-          )}
-        </div>
+        {productRes ? (
+          <>
+            <div>
+              <Text txt={"Product sorted acording to price"} />
+              <Chart
+                chartType="Bar"
+                data={state.priceSorted}
+                options={{
+                  title: "Product sorted according to price",
+                }}
+                width="100%"
+                height="100vh"
+              />
+            </div>
+            <div>
+              <Chart
+                chartType="ComboChart"
+                data={state.stockSorted}
+                options={{
+                  title: "Stock of products ",
+                }}
+                width="100%"
+                height="100vh"
+              />
+            </div>
+            <div>
+              <Chart
+                chartType="ColumnChart"
+                data={state.mostPurchasedProduct}
+                options={{
+                  title: "Most purchased product",
+                }}
+                width="100%"
+                height="100vh"
+              />
+            </div>
+            {/* <div className="w-1/12 mx-auto my-6 ">
+              <select
+                onChange={handleSelectChange}
+                name="User Name"
+                id="user_name"
+              >
+                <option value="username">Select Name</option>
+                {userRes.map(({ user_id, name }) => {
+                  return (
+                    <option key={user_id} value={user_id}>
+                      {name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div> */}
+          </>
+        ) : (
+          <h1>Loading...</h1>
+        )}
       </div>
     </>
   );

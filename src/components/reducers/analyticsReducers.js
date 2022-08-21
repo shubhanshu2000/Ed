@@ -3,6 +3,8 @@ export const initialState = {
   clicked: false,
   priceSorted: [],
   stockSorted: [],
+  setPPL: [],
+  setPPLID: "",
   mostPurchasedProduct: [],
 };
 
@@ -16,6 +18,11 @@ export const analyticsReducer = (state, action) => {
       return { ...state, stockSorted: action.payload };
     case "MOST_PURCHASED_PRODUCT":
       return { ...state, mostPurchasedProduct: action.payload };
+    case "PPL":
+      return { ...state, setPPL: action.payload };
+    case "PPL_ID":
+      return { ...state, setPPLID: action.payload };
+
     default:
       return state;
   }
