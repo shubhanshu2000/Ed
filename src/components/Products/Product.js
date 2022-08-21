@@ -1,4 +1,5 @@
 import React from "react";
+import { ACTIONS } from "../Actions";
 
 const Product = ({ state, dispatch }) => {
   const { products, cart } = state;
@@ -24,7 +25,7 @@ const Product = ({ state, dispatch }) => {
                   className="bg-red-400 w-full rounded-xl py-2 my-2 cursor-pointer"
                   onClick={() =>
                     dispatch({
-                      type: "REMOVE_FROM_CART",
+                      type: ACTIONS.REMOVE_FROM_CART,
                       payload: {
                         id: product.product_id,
                       },
@@ -38,7 +39,7 @@ const Product = ({ state, dispatch }) => {
                   className="bg-green-400 w-full rounded-xl py-2 my-2 cursor-pointer"
                   onClick={() =>
                     dispatch({
-                      type: "ADD_TO_CART",
+                      type: ACTIONS.ADD_TO_CART,
                       payload: {
                         id: product.product_id,
                         title: product.name,

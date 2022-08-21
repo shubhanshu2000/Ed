@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect } from "react";
+import { ACTIONS } from "../Actions";
 import Cart from "../Cart";
 import { cartReducer } from "../reducers/cartReducer";
 
@@ -11,7 +12,7 @@ function Home() {
   const fetchData = async () => {
     const response = await fetch(url);
     const resData = await response.json();
-    dispatch({ type: "ADD_PRODUCTS", payload: resData });
+    dispatch({ type: ACTIONS.ADD_PRODUCT, payload: resData });
   };
 
   useEffect(() => {

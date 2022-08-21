@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ACTIONS } from "./Actions";
 
 const Cart = ({ state, dispatch }) => {
   const { cart } = state;
@@ -12,7 +13,7 @@ const Cart = ({ state, dispatch }) => {
 
   const changeQty = (id, qty) =>
     dispatch({
-      type: "CHANGE_CART_QTY",
+      type: ACTIONS.CHANGE_CART_QTY,
       payload: {
         id: id,
         qty: qty,
