@@ -23,13 +23,13 @@ const Analytics = ({ state, dispatch }) => {
       type: ACTIONS.PRODUCTS_SORTED_ACC_TO_PRICE,
       payload: priceSortedArr,
     });
-
+    //Stock sorter
     const stockSorter = (a, b) => {
       return a.stock - b.stock;
     };
     arr.sort(stockSorter);
-    arr.map(({ stock, name }) => {
-      stockSortedArr.push([stock, name]);
+    arr.map(({ name, stock }) => {
+      stockSortedArr.push([name, stock]);
       return stockSortedArr;
     });
     dispatch({
@@ -37,11 +37,11 @@ const Analytics = ({ state, dispatch }) => {
       payload: stockSortedArr,
     });
   };
-  console.log(state.mappedData);
+
   useEffect(() => {
     ProductSort(productRes);
   }, [state.analyticData]);
-  console.log(state.priceSorted);
+
   return (
     <>
       <div className="flex flex-col w-full">
@@ -60,7 +60,7 @@ const Analytics = ({ state, dispatch }) => {
         )}
         {productRes ? (
           <Chart
-            chartType="Bar"
+            chartType="PieChart"
             data={state.stockSorted}
             options={{
               title: "Most purchased product",
