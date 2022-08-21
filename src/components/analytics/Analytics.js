@@ -61,6 +61,7 @@ const Analytics = ({ state, dispatch }) => {
       find ? (find.quantity += item.quantity) : obj.push(d);
       return obj;
     }, []);
+
     q.sort((a, b) => a.quantity - b.quantity);
     q.map(({ name, quantity }) => {
       MostPurchasedProductArr.push([name, quantity]);
@@ -70,40 +71,7 @@ const Analytics = ({ state, dispatch }) => {
       type: ACTIONS.MOST_PURCHASED_PRODUCT,
       payload: MostPurchasedProductArr,
     });
-
-    //Most purchased product acc to user and quantity
-
-    n.filter(({ name, user_id, order_date, quantity }) => {
-      userRes.find((user) => {
-        user.user_id === user_id &&
-          ppl.push({
-            name,
-            quantity,
-            userName: user.name,
-            order_date,
-            user_id,
-          });
-        return user.user_id === user_id;
-      });
-      return user_id;
-    });
-    // ppl.reduce((obj, item) => {
-    //   if (state.setPPLID === obj.user_id) {
-    //     let find = obj.find((i) => i.name === item.name);
-    //     let d = { ...item };
-    //     find ? (find.quantity += item.quantity) : obj.push(d);
-    //   }
-    //   return obj;
-    // }, []);
-    // ppl.sort((a, b) => a.user_id - b.user_id);
-    // console.log(ppl);
-    // dispatch({ type: ACTIONS.PPL, payload: ppl });
   };
-
-  // const handleSelectChange = (e) => {
-  //   const { value } = e.target;
-  //   dispatch({ type: ACTIONS.PPL_ID, payload: value });
-  // };
 
   useEffect(() => {
     ProductSort(productRes);
@@ -149,22 +117,6 @@ const Analytics = ({ state, dispatch }) => {
                 height="100vh"
               />
             </div>
-            {/* <div className="w-1/12 mx-auto my-6 ">
-              <select
-                onChange={handleSelectChange}
-                name="User Name"
-                id="user_name"
-              >
-                <option value="username">Select Name</option>
-                {userRes.map(({ user_id, name }) => {
-                  return (
-                    <option key={user_id} value={user_id}>
-                      {name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div> */}
           </>
         ) : (
           <h1>Loading...</h1>
