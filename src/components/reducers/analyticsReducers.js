@@ -4,8 +4,10 @@ export const initialState = {
   priceSorted: [],
   stockSorted: [],
   setPPL: [],
-  setPPLID: "",
+  setPPLID: "1",
+  UserName: "",
   mostPurchasedProduct: [],
+  productsPurchasedByIndividualUser: [],
 };
 
 export const analyticsReducer = (state, action) => {
@@ -22,7 +24,10 @@ export const analyticsReducer = (state, action) => {
       return { ...state, setPPL: action.payload };
     case "PPL_ID":
       return { ...state, setPPLID: action.payload };
-
+    case "PRODUCTS_PURCHASED_BY_INDIVIDUAL_USER":
+      return { ...state, productsPurchasedByIndividualUser: action.payload };
+    case "USER_NAME":
+      return { ...state, UserName: action.payload };
     default:
       return state;
   }

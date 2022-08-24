@@ -38,13 +38,36 @@ const Analytics = ({ state, dispatch }) => {
     });
   };
 
+  const handleSelectChange = (e) => {
+    const { value } = e.target;
+    dispatch({ type: ACTIONS.PPL_ID, payload: value });
+  };
+
+  let ppl = [];
+
+  function getNewPPL(id) {
+    let newPPLArr = [["Product", "Quantitiy"]];
+    let ppLen = ppl.length;
+    for (let i = 1; i < ppLen; i++) {
+      if (ppl[i].user_id === Number(id)) {
+        let pr = ppl[i].productName;
+        let qn = ppl[i].quantity;
+        let un = ppl[i].userName;
+        newPPLArr.push([pr, qn]);
+        dispatch({ type: ACTIONS.USER_NAME, payload: un });
+      }
+    }
+
+    dispatch({
+      type: ACTIONS.PRODUCTS_PURCHASED_BY_INDIVIDUAL_USER,
+      payload: newPPLArr,
+    });
+  }
+
   const PurchasedProduct = (arr = []) => {
     let MostPurchasedProductArr = [["Name", "Quantity"]];
-    let ppl = [];
-    let newPPL = [];
     let q = [];
     let n = [];
-
     arr.filter(({ product_id, quantity, user_id, order_date }) => {
       productRes.find((product) => {
         product.product_id === product_id &&
@@ -72,8 +95,6 @@ const Analytics = ({ state, dispatch }) => {
       payload: MostPurchasedProductArr,
     });
 
-    //Most purchased product acc to user and quantity
-
     n.filter(({ productName, user_id, order_date, quantity }) => {
       userRes.find((user) => {
         user.user_id === user_id &&
@@ -88,22 +109,15 @@ const Analytics = ({ state, dispatch }) => {
       });
       return user_id;
     });
-    // console.log(userRes);
 
-    ppl.sort((a, b) => a.user_id - b.user_id);
-    console.log(ppl);
     dispatch({ type: ACTIONS.PPL, payload: ppl });
-  };
-
-  const handleSelectChange = (e) => {
-    const { value } = e.target;
-    dispatch({ type: ACTIONS.PPL_ID, payload: value });
   };
 
   useEffect(() => {
     ProductSort(productRes);
     PurchasedProduct(orderRes);
-  }, [state.analyticData]);
+    getNewPPL(state.setPPLID);
+  }, [state.analyticData, state.setPPLID]);
 
   return (
     <>
@@ -144,21 +158,32 @@ const Analytics = ({ state, dispatch }) => {
                 height="100vh"
               />
             </div>
-            <div className="w-1/12 mx-auto my-6 ">
-              <select
-                onChange={handleSelectChange}
-                name="User Name"
-                id="user_name"
-              >
-                <option value="username">Select Name</option>
-                {userRes.map(({ user_id, name }) => {
-                  return (
-                    <option key={user_id} value={user_id}>
-                      {name}
-                    </option>
-                  );
-                })}
-              </select>
+
+            <div>
+              <div className="w-1/12 mx-auto mt-16 ">
+                <select
+                  onChange={handleSelectChange}
+                  name="User Name"
+                  id="user_name"
+                >
+                  {userRes.map(({ user_id, name }) => {
+                    return (
+                      <option key={user_id} value={user_id}>
+                        {name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <Chart
+                chartType="ColumnChart"
+                data={state.productsPurchasedByIndividualUser}
+                options={{
+                  title: `Products purchased by ${state.UserName}`,
+                }}
+                width="100%"
+                height="100vh"
+              />
             </div>
           </>
         ) : (
